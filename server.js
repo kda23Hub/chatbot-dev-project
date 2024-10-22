@@ -16,12 +16,17 @@ app.get('/', (req, res) => {
 app.post('/getChatbotResponse', async (req, res) => {
     const userMessage = req.body.userMessage;
 
-    // Use OpenAI API to generate a response
-    const chatbotResponse = await OpenAIAPI.generateResponse(userMessage);
-
-    // Send the response back to the client
-    res.json({ chatbotResponse });
+    try {
+        // Use OpenAI API to generate a response
+        const chatbotResponse = await OpenAIAPI.generateResponse(userMessage);
+        // Send the response back to the client
+        res.json({ chatbotResponse });
+    } catch (error) {
+        console.error('Error in /getChatbotResponse:', error);
+        res.status(500).json({ error: 'Failed to get response from chatbot' });
+    }
 });
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
